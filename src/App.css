@@ -9,6 +9,10 @@
 	--success-color: #28a745;
 }
 
+::-webkit-scrollbar {
+	display: none;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -112,7 +116,7 @@ img {
 /* Cards */
 .card {
 	padding: 1rem;
-	border: #ccc 0px dotted;
+	border: #ccc 1px dotted;
 	margin: 0.7rem 0;
 }
 
