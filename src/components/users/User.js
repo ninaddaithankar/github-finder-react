@@ -1,13 +1,14 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, useContext } from 'react';
 import Repos from '../repos/Repos';
 import { Link } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
-import PropTypes from 'prop-types';
+import GithubContext from '../../context/github/githubContext';
 
-const User = ({ getUser, getUserRepos, user, repos, loading, match }) => {
+const User = ({ match }) => {
+	const githubContext = useContext(GithubContext);
 	useEffect(() => {
-		getUser(match.params.login);
-		getUserRepos(match.params.login);
+		githubContext.getUser(match.params.login);
+		githubContext.getUserRepos(match.params.login);
 		//eslint-disable-next-line
 	}, []);
 
@@ -25,9 +26,9 @@ const User = ({ getUser, getUserRepos, user, repos, loading, match }) => {
 		public_repos,
 		public_gists,
 		hireable
-	} = user;
+	} = githubContext.user;
 
-	if (loading) return <Spinner />;
+	if (githubContext.loading) return <Spinner />;
 
 	return (
 		<Fragment>
@@ -42,7 +43,12 @@ const User = ({ getUser, getUserRepos, user, repos, loading, match }) => {
 						className='round-img'
 						style={{ width: '15rem' }}
 					/>
-					<a target='_blank' href={html_url} className='title-font'>
+					<a
+						target='_blank'
+						rel='noopener noreferrer'
+						href={html_url}
+						className='title-font'
+					>
 						<h1>{name}</h1>
 					</a>
 					<h3 style={{ fontWeight: 'normal' }}>
@@ -108,17 +114,9 @@ const User = ({ getUser, getUserRepos, user, repos, loading, match }) => {
 				<div className='badge badge-light'>Public Repos : {public_repos}</div>
 				<div className='badge badge-dark'>Public Gists : {public_gists}</div>
 			</div>
-			<Repos repos={repos} />
+			<Repos repos={githubContext.repos} />
 		</Fragment>
 	);
-};
-
-User.propTypes = {
-	getUser: PropTypes.func.isRequired,
-	getUserRepos: PropTypes.func.isRequired,
-	user: PropTypes.object.isRequired,
-	repos: PropTypes.array.isRequired,
-	loading: PropTypes.bool
 };
 
 export default User;
